@@ -1,23 +1,22 @@
 <template>
-  <v-layout class="bg" style="height:100vh">
-    <v-row style="height:100vh" justify="center" align="center">
+  <v-layout class="bg" style="height:90vh">
+    <v-row style="height:90vh" justify="center" align="center">
       <v-col cols="12" md="4">
         <v-card class="rounded-xl px-2 py-12 pa-md-7 " elevation="5">
           <v-card-text class=" text-center">
             <div class="mb-5">
               <img
-                src="~assets/img/logo-agrowing.png"
+                src="~assets/img/logo e-growing hijau.png"
                 class="px-12"
-                alt="Agrowing"
+                alt="eGrowing"
                 width="100%"
               />
-              <!-- <div class="">Masuk dengan akun Agrowing</div> -->
             </div>
             <v-form>
               <v-row no-gutters justify="center">
                 <v-col cols="12" v-if="error">
                   <v-alert dense outlined type="error" class="rounded-pill">
-                    Username atau katasandi salah
+                    Username atau kata sandi salah
                   </v-alert>
                 </v-col>
                 <v-col cols="12">
@@ -28,7 +27,8 @@
                     outlined
                     rounded
                     persistent-placeholder
-                  ></v-text-field>
+                    @keyup.enter="userLogin()"
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
@@ -37,9 +37,12 @@
                     v-model="login.password"
                     dense
                     persistent-placeholder
-                    type="password"
                     rounded
-                  ></v-text-field>
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="handleclick"
+                    @keyup.enter="userLogin()"
+                  />
                 </v-col>
               </v-row>
 
@@ -48,7 +51,7 @@
                 block
                 rounded
                 @click.stop="userLogin"
-                class="py-3 text-none text-caption font-weight-medium"
+                class="py-3 text-none text-button font-weight-medium"
                 >Masuk</v-btn
               >
             </v-form>
@@ -65,6 +68,7 @@ export default {
   data() {
     return {
       error: false,
+      showPassword: false,
       login: {
         email: "admin@mail.com",
         password: "12345678"
@@ -72,11 +76,19 @@ export default {
     };
   },
   methods: {
+    handleclick() {
+      this.showPassword = !this.showPassword;
+    },
     async userLogin() {
       try {
         let response = await this.$auth.loginWith("local", {
           data: this.login
         });
+        if (this.$auth.$state.user.role_id == 1) {
+          this.$router.replace("/manager-kebun/dashboard");
+        } else if (this.$auth.$state.user.role_id == 2) {
+          this.$router.replace("/admin/dashboard");
+        }
         console.log(response);
       } catch (err) {
         this.error = true;

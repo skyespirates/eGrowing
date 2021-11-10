@@ -3,16 +3,7 @@
     <v-col cols="12">
       <div class="d-flex">
         <div class="title">
-          Data Petani
-        </div>
-        <div class="ml-auto">
-          <v-btn
-            rounded
-            class="text-none text-caption px-7  "
-            to="/admin/petani/tambah"
-            color="primary"
-            ><v-icon>mdi-plus</v-icon> Tambah Petani</v-btn
-          >
+          Permintaan Membership
         </div>
       </div>
     </v-col>
@@ -27,20 +18,13 @@
         ></v-text-field>
       </div>
       <v-data-table :headers="th_petani" :items="petanis" :search="cari">
-        <template v-slot:[`item.id`]="{ item }">
-          <v-btn
-            color="primary"
-            :to="'/admin/petani/' + item.id"
-            outlined
-            class=" px-12 text-none text-caption small"
-            rounded
-            >Detail</v-btn
-          >
+        <template v-slot:[`item.status`]="{ item }">
+          <v-chip :color="green" dark>
+            {{ item.status }}
+          </v-chip>
         </template>
       </v-data-table>
     </v-col>
-
-    <!-- <pre>{{ petanis }}</pre> -->
   </v-row>
 </template>
 
@@ -54,17 +38,33 @@ export default {
         {
           id: "",
           nama: "",
-          no_hp: ""
+          no_hp: "",
+          status: ""
         }
       ],
       th_petani: [
+        {
+          text: "ID",
+          value: "id",
+          align: "center",
+          sortable: false
+        },
         {
           text: "Nama",
           value: "nama"
         },
         {
+          text: "Jenis Kelamin",
+          value: "jenis_kelamin"
+        },
+        {
           text: "Kontak",
           value: "no_hp",
+          sortable: false
+        },
+        {
+          text: "Email",
+          value: "email",
           sortable: false
         },
         {
@@ -73,10 +73,15 @@ export default {
           sortable: false
         },
         {
-          text: "Aksi",
-          value: "id",
-          align: "center",
+          text: "Kabupaten/Kota",
+          value: "alamat.regency.name",
           sortable: false
+        },
+        {
+          text: "Status",
+          value: "status",
+          color: "primary",
+          sortable: true
         }
       ]
     };
@@ -87,8 +92,8 @@ export default {
   methods: {
     async getPetanis() {
       try {
-        let response = await this.$axios.get("api/v1/managerkebun");
-        this.petanis = response.data.daftar_manager_kebun;
+        let response = await this.$axios.get("api/v1/member-terdaftar");
+        this.petanis = response.data.daftar_member_terdaftar;
         console.log(response);
       } catch (err) {
         this.error = true;

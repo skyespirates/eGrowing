@@ -1,108 +1,67 @@
 <template>
-  <v-row justify="center" align="center">
-    <pre>
-
-    {{ $auth.user }}
-    </pre>
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
+  <v-row class="mb-xs-0 py-xs-0 py-md-7">
+    <v-col cols="12">
+      <div class="d-flex">
+        <div class="title">Panduan Budidaya</div>
       </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire">
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+    </v-col>
+    <v-col cols="12" class="my-0 pt-0">
+      <v-divider color="primary"></v-divider>
+    </v-col>
+    <v-col cols="6" md="3" v-for="sop in sops" :key="sop.id">
+      <v-hover v-slot="{ hover }" open-delay="200">
+        <v-card
+          :elevation="hover ? 5 : 2"
+          class="mx-auto pb-2 { 'on-hover': hover }"
+          color="light-green lighten-4"
+          :to="'/panduan/' + sop.id"
+        >
+          <img src="~assets/img/buah.jpeg" class="background" />
+          <v-card-title class="py-0" color="primary accent-4">
+            {{ sop.sop_nama }}
+          </v-card-title>
+        </v-card>
+      </v-hover>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import Logo from "~/components/Logo.vue";
-import VuetifyLogo from "~/components/VuetifyLogo.vue";
-
 export default {
-  middleware({redirect, store }) {
-      // If the user is not authenticated
-      if (store.state.auth.user.role_id == 1) {
-        return redirect('/manager-kebun/project-tanam')
+  auth: false,
+  layout: "guest",
+  data() {
+    return {
+      sops: [
+        {
+          id: "",
+          sop_nama: ""
+        }
+      ]
+    };
+  },
+  mounted() {
+    this.getJudulSops();
+  },
+  methods: {
+    async getJudulSops() {
+      try {
+        let response = await this.$axios.get("api/v1/sop");
+        this.sops = response.data.sop;
+
+        console.log(response);
+      } catch (err) {
+        this.error = true;
+        console.log(err);
       }
-      if (store.state.auth.user.role_id == 2) {
-        return redirect('/admin/dashboard')
-      }
-    },
-  components: {
-    Logo,
-    VuetifyLogo
+    }
   }
 };
 </script>
+
+<style>
+.background {
+  height: auto;
+  max-width: 100%;
+}
+</style>

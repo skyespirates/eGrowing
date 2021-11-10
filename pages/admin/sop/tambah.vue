@@ -89,6 +89,7 @@
                   <v-text-field
                     outlined
                     type="number"
+                    step="any" 
                     v-model="sop.kalkulasi_bobot_panen"
                     hide-details=""
                     dense
@@ -228,6 +229,7 @@
 
 <script>
 export default {
+  // middleware: "permission",
   data() {
     return {
       tahapans: [],

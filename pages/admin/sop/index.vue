@@ -27,7 +27,7 @@
         ></v-text-field>
       </div>
       <v-data-table :headers="th_sops" :items="sops" :search="cari">
-        <template v-slot:item.id="{ item }">
+        <template v-slot:[`item.id`]="{ item }">
           <v-btn
             color="primary"
             :to="'/admin/sop/' + item.id"
@@ -44,6 +44,7 @@
 
 <script>
 export default {
+  // middleware: "permission",
   data() {
     return {
       cari: "",

@@ -190,6 +190,7 @@
 
 <script>
 export default {
+  // middleware: "permission",
   data() {
     return {
       sops: [],

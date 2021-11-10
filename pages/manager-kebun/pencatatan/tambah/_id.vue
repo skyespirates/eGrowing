@@ -1,23 +1,15 @@
 <template>
   <v-row no-gutters>
-    <v-col cols="12 mb-3">
-      <div class="d-flex">
-        <div class="title">
-          Pencatatan Harian
-        </div>
-      </div>
-    </v-col>
-    <!-- <pre>{{project}}</pre> -->
-    <v-col cols="12" class="mb-3">
+    <v-col cols="12" class="my-3">
       <v-card>
-        <!-- <pre>
-
-        {{ charian }}
-        </pre> -->
-        <v-card-title>{{ nama_sop }}</v-card-title>
-        <v-card-subtitle>{{ project.alamat.alamat }}</v-card-subtitle>
-        <v-card-text>
-          <v-row no-gutters>
+        <v-card color="green" light elevation="0">
+          <v-card-title>Pencatatan Harian</v-card-title>
+        </v-card>
+        <v-divider></v-divider>
+        <v-card-title>Komoditas: {{ nama_sop }}</v-card-title>
+        <v-card-subtitle>Alamat: {{ project.alamat.alamat }}</v-card-subtitle>
+        <v-card-text class="mb-0 pb-1">
+          <v-row no-gutters class="mb-0">
             <v-col cols="12 mb-2">
               <v-row align="center" no-gutters>
                 <v-col cols="12" md="3">
@@ -46,8 +38,9 @@
                     hide-details=""
                     dense
                     type="date"
+                    v-model="charian.tanggal"
                     item-value="id"
-                    item-text="nama_tahapan"
+                    item-text="tanggal"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -74,74 +67,112 @@
             </v-col>
           </v-row>
         </v-card-text>
-      </v-card>
-    </v-col>
-    <v-col cols="12" v-if="charian.tahapan_id">
-      <v-card>
-        <!-- <pre>
-
-{{ charian }}
-        </pre> -->
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" v-for="sop in charian.kegiatan" :key="sop.id">
-              <v-checkbox
-                hide-details=""
-                false-value="0"
-                true-value="1"
-                v-model="sop.filled"
-                :label="sop.item_pekerjaan"
-              ></v-checkbox>
-              <v-row no-gutters class="my-2" v-if="sop.filled == 1">
-                <v-col
-                  cols="12 mb-1"
-                  v-for="indikator in sop.indikator"
-                  :key="indikator.id"
+        <v-col cols="12" v-if="charian.tahapan_id" class="px-0">
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <v-divider></v-divider>
+              </v-col>
+              <v-col cols="12">
+                Anda akan membuat
+                <strong
+                  >Laporan
+                  {{
+                    charian.tahapan_id == 1
+                      ? "Persiapan Lahan dan Tanaman"
+                      : charian.tahapan_id == 2
+                      ? "Perawatan Tanaman Belum Menghasilkan"
+                      : charian.tahapan_id == 3
+                      ? "Perawatan Tanaman Menghasilkan"
+                      : "Pemanenan"
+                  }}
+                </strong>
+                untuk <strong>Blok {{ charian.blok_lahan_id }}</strong> pada
+                tanggal
+                <strong>
+                  {{ new Date(charian.tanggal).getDate() }}
+                  {{ new Date(charian.tanggal).getMonth() | monthFormat }}
+                  {{ new Date(charian.tanggal).getFullYear() }}</strong
                 >
-                  <!-- {{indikator}} -->
-                  <v-text-field
-                    :label="indikator.nama_indikator"
-                    dense
-                    outlined
-                    v-model="indikator.catat_jawaban"
-                    hide-details=""
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                outlined
-                label="Catatan"
-                persistent-placeholder
-                v-model="charian.catatan"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            class="text-none text-caption"
-            @click.stop="postCatatan()"
-            block
-            color="primary"
-            >Simpan</v-btn
-          >
-        </v-card-actions>
+              </v-col>
+              <v-col cols="12" v-for="sop in charian.kegiatan" :key="sop.id">
+                <v-row>
+                  <v-col cols="12" md="9">
+                    <v-checkbox
+                      hide-details=""
+                      false-value="0"
+                      true-value="1"
+                      v-model="sop.filled"
+                      :label="sop.item_pekerjaan"
+                      class="py-1 my-1"
+                    ></v-checkbox>
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="3"
+                    class="d-flex align-center mx-0 my-0 py-0"
+                  >
+                    Durasi Waktu: {{ sop.durasi_waktu }}
+                  </v-col>
+                  <v-col>
+                    <v-divider></v-divider>
+                  </v-col>
+                </v-row>
+                <v-row no-gutters class="my-2" v-if="sop.filled == 1">
+                  <v-col
+                    cols="12 mb-1"
+                    v-for="indikator in sop.indikator"
+                    :key="indikator.id"
+                  >
+                    <!-- {{indikator}} -->
+                    <v-text-field
+                      :label="indikator.nama_indikator"
+                      dense
+                      outlined
+                      v-model="indikator.catat_jawaban"
+                      hide-details=""
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  outlined
+                  label="Catatan"
+                  rows="3"
+                  persistent-placeholder
+                  v-model="charian.catatan"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              class="text-none text-caption"
+              @click.stop="postCatatan()"
+              block
+              color="primary"
+              >Simpan</v-btn
+            >
+          </v-card-actions>
+        </v-col>
       </v-card>
+      <!-- <pre>{{ sops }}</pre> -->
     </v-col>
   </v-row>
 </template>
 
 <script>
 export default {
+  // middleware: "permission",
   data() {
     return {
       charian: {
         blok_lahan_id: "",
         tahapan_id: "",
         kegiatan: [],
-        catatan: ""
+        catatan: "",
+        tanggal: ""
       },
       disable: false,
       nama: "",
@@ -209,6 +240,7 @@ export default {
         .forEach(element => {
           this.charian.kegiatan.push({
             item_pekerjaan: element.nama_kegiatan,
+            durasi_waktu: element.durasi_waktu,
             filled: 0,
             indikator: []
           });

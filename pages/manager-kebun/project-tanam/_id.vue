@@ -1,21 +1,36 @@
 <template>
   <v-row class="py-5" justify="center">
     <v-col cols="12">
-      <div class="title">Project Tanam ID : {{project.id}}</div>
-    </v-col>
-    <v-col cols="12">
+      <!-- <pre>{{project}}</pre> -->
       <v-card>
+        <v-card-title>
+          {{ nama_sop }}
+        </v-card-title>
+        <v-card-subtitle>
+          <div>Project Tanam ID : {{ project.id }}</div>
+        </v-card-subtitle>
         <v-card-text>
-          <div class="d">
-            <div class="title">
-              {{ nama_sop }}
-            </div>
-            <div class="subtitle-1">
-              Tahapan kebun
-            </div>
+          <div>
+            Tahapan kebun :
+            {{
+              project.tahapan_sop_id == 1
+                ? "Persiapan Lahan dan Tanaman"
+                : project.tahapan_sop_id == 2
+                ? "Perawatan Tanaman Belum Menghasilkan"
+                : project.tahapan_sop_id == 3
+                ? "Perawatan Tanaman Menghasilkan"
+                : "Pemanenan"
+            }}
           </div>
-          <div class="">Dibuat {{ project.created_at }}</div>
+          <template>
+            <span
+              >Dibuat pada {{ new Date(project.created_at).getDate() }}
+              {{ new Date(project.created_at).getMonth() | monthFormat }}
+              {{ new Date(project.created_at).getFullYear() }}
+            </span>
+          </template>
         </v-card-text>
+
         <v-card-text>
           <v-row>
             <v-col
@@ -24,33 +39,42 @@
               v-for="blok in project.blok_lahan"
               :key="blok.id"
             >
-              <v-card>
-                <v-card-title class="mb-0 pb-0"
-                  >Blok ID {{ blok.id }}</v-card-title
+              <v-sheet outlined color="green" rounded>
+                <v-card
+                  outlined
+                  elevation="0"
+                  class="d-flex align-content-start flex-wrap"
                 >
-                <v-card-text>
-                  <div class="">
-                    Luas lahan {{ blok.luas_blok }} m<sup>2</sup>
-                  </div>
-                  <div class="">Jumlah tanaman {{ blok.luas_blok }}</div>
-                  <div class="">Umur tanaman {{ blok.umur_tanaman }} bulan</div>
-                </v-card-text>
-              </v-card>
+                  <v-card-title>
+                    <div class="text-subtitle-1 font-weight-bold">
+                      Blok ID {{ blok.id }}
+                    </div>
+                  </v-card-title>
+                  <v-card-text>
+                    <div class="text-body1">
+                      Luas lahan {{ blok.luas_blok }} m2
+                    </div>
+                    <div class="text-body1 ">
+                      Jumlah tanaman : {{ blok.jumlah_tanaman }}
+                    </div>
+                    <div class="text-body1 ">
+                      Umur tanaman : {{ blok.umur_tanaman }}
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </v-sheet>
             </v-col>
           </v-row>
         </v-card-text>
-
       </v-card>
-    </v-col>
-    <v-col cols="5">
-      <maintenance/>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import Maintenance from '../../../components/Maintenance.vue';
+import Maintenance from "../../../components/Maintenance.vue";
 export default {
+  // middleware: "permission",
   components: { Maintenance },
   data() {
     return {
@@ -84,7 +108,6 @@ export default {
           "api/v1/project/" + this.$route.params.id
         );
         this.project = response.data.data;
-
         console.log(response);
       } catch (err) {
         this.error = true;

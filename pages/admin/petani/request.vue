@@ -3,7 +3,7 @@
     <v-col cols="12">
       <div class="d-flex">
         <div class="title">
-          Panduan Bercocok Tanam
+          Daftar Request Membership
         </div>
       </div>
     </v-col>
@@ -17,11 +17,11 @@
           outlined
         ></v-text-field>
       </div>
-      <v-data-table :headers="th_sops" :items="sops" :search="cari">
-        <template v-slot:item.id="{ item }">
+      <v-data-table :headers="th_petani" :items="petanis" :search="cari">
+        <template v-slot:[`item.id`]="{ item }">
           <v-btn
             color="primary"
-            :to="'/manager-kebun/panduan/' + item.id"
+            :to="'/admin/petani/' + item.id"
             outlined
             class=" px-12 text-none text-caption small "
             rounded
@@ -30,52 +30,56 @@
         </template>
       </v-data-table>
     </v-col>
+
+    <pre>{{ petanis }}</pre>
   </v-row>
 </template>
 
 <script>
 export default {
+  // middleware: "permission",
   data() {
     return {
       cari: "",
-      sops: [
-
+      petanis: [
+        {
+          id: "",
+          nama: "",
+          no_hp: ""
+        }
       ],
-      th_sops: [
+      th_petani: [
         {
           text: "Nama",
-          value: "sop_nama"
+          value: "nama"
         },
         {
-          text: "Deskripsi",
-          value: "deskripsi",
+          text: "Kontak",
+          value: "no_hp",
           sortable: false
         },
         {
-          text: "Periode Tanam",
-          value: "estimasi_panen",
+          text: "Alamat",
+          value: "alamat.alamat",
           sortable: false
         },
         {
-          text: "",
+          text: "Aksi",
           value: "id",
-          align: "right",
+          align: "center",
           sortable: false
         }
       ]
     };
   },
-  mounted(){
-    this.getSops();
+  mounted() {
+    this.getPetanis();
   },
   methods: {
-    async getSops() {
+    async getPetanis() {
       try {
-        let response = await this.$axios.get(
-          "api/v1/sop"
-        );
-        this.sops = response.data.sop;
-
+        let response = await this.$axios.get("api/v1/member-terdaftar");
+        this.petanis = response.data;
         console.log(response);
       } catch (err) {
         this.error = true;

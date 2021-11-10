@@ -227,8 +227,10 @@
 </template>
 
 <script>
-import Maintenance from "../../../components/Maintenance.vue";
+import Maintenance from "../../components/Maintenance.vue";
 export default {
+  auth: false,
+  layout: "guest",
   components: { Maintenance },
   data() {
     return {

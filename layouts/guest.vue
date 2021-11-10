@@ -2,7 +2,7 @@
   <v-app dark>
     <v-navigation-drawer v-model="drawer" clipped fixed app>
       <v-list shaped>
-        <v-list-item class="d-flex d-flex d-sm-none py-2">
+        <v-list-item class="d-flex d-sm-none py-2">
           <div>
             <img height="40px" src="~assets/img/logo e-growing hijau.png" />
           </div>
@@ -22,6 +22,15 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+
+        <v-list-item :to="'/masuk'" class="d-flex d-sm-none">
+          <v-list-item-action class="mr-5">
+            <v-icon>mdi-login</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="'Masuk'" />
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar clipped-left fixed dark app elevation="1" class="primary">
@@ -33,8 +42,8 @@
       </div>
 
       <v-spacer />
-      <v-btn icon @click.stop="userLogout" color="white">
-        <v-icon>mdi-logout</v-icon>
+      <v-btn @click.stop="goToLoginPage" color="white" class="hidden-xs-only">
+        <h5 style="color:green">Masuk</h5>
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -62,7 +71,7 @@
 
 <script>
 export default {
-  middleware: "auth",
+  auth: false,
   data() {
     return {
       clipped: false,
@@ -76,69 +85,23 @@ export default {
   },
   computed: {
     items() {
-      if (this.$auth.user.role_id == 2) {
-        return [
-          {
-            icon: "mdi-desktop-mac-dashboard",
-            title: "Dashboard",
-            to: "/admin/dashboard"
-          },
-          {
-            icon: "mdi-file-document-multiple",
-            title: "Laporan",
-            to: "/admin/laporan"
-          },
-          {
-            icon: "mdi-account-circle-outline",
-            title: "Petani",
-            to: "/admin/petani"
-          },
-          {
-            icon: "mdi-tractor",
-            title: "Lahan",
-            to: "/admin/lahan"
-          },
-          {
-            icon: "mdi-file-document-edit",
-            title: "SOP",
-            to: "/admin/sop"
-          },
-          {
-            icon: "mdi-account-clock-outline",
-            title: "Membership",
-            to: "/admin/membership"
-          }
-        ];
-      } else if (this.$auth.user.role_id == 1) {
-        return [
-          {
-            icon: "mdi-view-dashboard-outline",
-            title: "Beranda",
-            to: "/manager-kebun/dashboard"
-          },
-          {
-            icon: "mdi-sprout-outline",
-            title: "Project Tanam",
-            to: "/manager-kebun/project-tanam"
-          },
-          {
-            icon: "mdi-account-outline",
-            title: "Profil",
-            to: "/manager-kebun/profil"
-          }
-        ];
-      }
+      return [
+        {
+          icon: "mdi-flower-tulip-outline",
+          title: "Panduan Budidaya",
+          to: "/"
+        },
+        {
+          icon: "mdi-account-outline",
+          title: "Daftar",
+          to: "/daftar"
+        }
+      ];
     }
   },
   methods: {
-    async userLogout() {
-      try {
-        let response = await await this.$auth.logout();
-        console.log(response);
-      } catch (err) {
-        this.error = true;
-        console.log(err);
-      }
+    goToLoginPage() {
+      this.$router.push("/masuk");
     }
   }
 };

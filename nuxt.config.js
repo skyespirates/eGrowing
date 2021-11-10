@@ -12,15 +12,15 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - agrowing',
-    title: 'agrowing',
+    titleTemplate: 'eGrowing',
+    title: 'eGrowing',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/logo.ico' }
     ]
   },
 
@@ -30,6 +30,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/filters.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -54,7 +55,7 @@ export default {
     redirect: {
       login: '/masuk',
       logout: '/masuk',
-      callback: '/masuk',
+      callback: '/',
       home: '/'
     },
     strategies: {
@@ -78,12 +79,20 @@ export default {
     }
   },
   router: {
-    middleware: ['auth']
+    middleware: ['auth'],
+    auth : ['guest']
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-      baseURL:'http://47.254.251.8:3010/',
+    // port: 3010,
+    // host: "47.254.251.8",
+    // https: false,
+    baseURL:'http://47.254.251.8:3010/',
+    // headers:{
+    //   'Content-Type': 'application/x-www-form-urlencoded',
+    //   'Accept': 'application/json'
+    // }
     // proxy: true
   },
   // proxy: {
@@ -93,8 +102,16 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    meta: {
+      title: "eGrowing"
+    },
     manifest: {
-      lang: 'en'
+      lang: 'en',
+      name: "eGrowing",
+      short_name: "eGrowing"
+    },
+    icon: {
+      fileName: "logo.png"
     }
   },
 
@@ -114,10 +131,17 @@ export default {
           success: colors.green.accent3
         },
         light:{
-          primary:colors.green.darken1
+          primary:colors.green.darken1,
+          accent: colors.grey.darken3,
+          secondary:colors.white,
+          green:colors.green.lighten2,
         }
       }
     }
+  },
+  server: {
+    port: 3000,
+    host: "0.0.0.0"
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

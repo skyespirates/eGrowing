@@ -42,6 +42,7 @@
 <script>
 import Maintenance from "../../../components/Maintenance.vue";
 export default {
+  // middleware: "permission",
   components: { Maintenance },
   data() {
     return {
