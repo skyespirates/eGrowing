@@ -3,9 +3,7 @@
     <v-row class="py-5">
       <v-col cols="12">
         <div class="d-flex">
-          <div class="title">
-            Tambah Panduan SOP
-          </div>
+          <div class="title">Tambah Panduan SOP</div>
         </div>
       </v-col>
       <v-col cols="12">
@@ -74,9 +72,7 @@
                     dense
                     id="waktu_panen"
                   ></v-text-field>
-                  <div class="my-auto ml-2">
-                    hari
-                  </div>
+                  <div class="my-auto ml-2">hari</div>
                 </v-col>
               </v-row>
             </v-col>
@@ -89,7 +85,7 @@
                   <v-text-field
                     outlined
                     type="number"
-                    step="any" 
+                    step="any"
                     v-model="sop.kalkulasi_bobot_panen"
                     hide-details=""
                     dense
@@ -101,11 +97,7 @@
             <v-col cols="12" class="mb-0 pb-0">
               <div class="title">Standar Operasional Prosedur Budidaya</div>
             </v-col>
-            <v-col
-              cols="12"
-              v-for="(tahapan, tc) in tahapans"
-              :key="tahapan.id"
-            >
+            <v-col cols="12" v-for="tahapan in tahapans" :key="tahapan.id">
               <v-card elevation="1">
                 <v-card-title class="subtitle-1">{{
                   tahapan.nama_tahapan
@@ -114,7 +106,7 @@
 
                 <v-card-text
                   v-for="(keg, c) in sop.kegiatan.filter(
-                    e => e.tahapan_sop_id == tahapan.id
+                    (e) => e.tahapan_sop_id == tahapan.id
                   )"
                   :key="c"
                 >
@@ -221,7 +213,9 @@
         </v-form>
       </v-col>
       <v-col cols="12">
-        <v-btn block color="primary" rounded @click.stop="postSOP()">Simpan</v-btn>
+        <v-btn block color="primary" rounded @click.stop="postSOP()"
+          >Simpan</v-btn
+        >
       </v-col>
     </v-row>
   </v-container>
@@ -244,14 +238,14 @@ export default {
         kalkulasi_waktu_panen: "",
         kalkulasi_bobot_panen: "",
 
-        kegiatan: []
-      }
+        kegiatan: [],
+      },
     };
   },
   mounted() {
     this.getTahapan();
     this.getTipeJawaban();
-    this.sop.admin_id = this.$auth.user.admin.id
+    this.sop.admin_id = this.$auth.user.admin.id;
   },
   methods: {
     async getTipeJawaban() {
@@ -269,7 +263,7 @@ export default {
       try {
         let response = await this.$axios.get("api/v1/tahapan");
         this.tahapans = response.data.tahapan;
-        this.tahapans.forEach(e => {
+        this.tahapans.forEach((e) => {
           console.log(e);
           this.sop.kegiatan.push({
             kegiatan_id: this.sop.kegiatan.length + 1,
@@ -280,9 +274,9 @@ export default {
               {
                 indikator_id: this.indikator + 1,
                 nama_indikator: "",
-                tipe_jawaban: ""
-              }
-            ]
+                tipe_jawaban: "",
+              },
+            ],
           });
           this.indikator += 1;
         });
@@ -302,9 +296,9 @@ export default {
           {
             indikator_id: this.indikator + 1,
             nama_indikator: "",
-            tipe_jawaban: ""
-          }
-        ]
+            tipe_jawaban: "",
+          },
+        ],
       });
       this.indikator += 1;
     },
@@ -312,34 +306,31 @@ export default {
       obj.indikator.push({
         indikator_id: this.indikator + 1,
         nama_indikator: "",
-        tipe_jawaban: ""
+        tipe_jawaban: "",
       });
       this.indikator += 1;
     },
     hapusKegiatan(id) {
-      let index = this.sop.kegiatan.findIndex(e => e.kegiatan_id == id, 0);
+      let index = this.sop.kegiatan.findIndex((e) => e.kegiatan_id == id, 0);
       console.log(index);
       this.sop.kegiatan.splice(index, 1);
     },
     hapusIndikator(keg, id) {
-      let index = keg.indikator.findIndex(e => e.indikator_id == id, 0);
+      let index = keg.indikator.findIndex((e) => e.indikator_id == id, 0);
       console.log(index);
       keg.indikator.splice(index, 1);
     },
     async postSOP() {
       try {
-        let response = await this.$axios.post(
-          "api/v1/sop",
-          this.sop
-        );
+        let response = await this.$axios.post("api/v1/sop", this.sop);
         console.log(response);
         this.$router.push("/admin/sop");
       } catch (err) {
         this.error = true;
         console.log(err);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

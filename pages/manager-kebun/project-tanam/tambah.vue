@@ -2,9 +2,7 @@
   <v-row class="py-5">
     <v-col cols="12">
       <div class="d-flex">
-        <div class="title">
-          Buat Proyek Tanam
-        </div>
+        <div class="title">Buat Proyek Tanam</div>
       </div>
     </v-col>
 
@@ -167,7 +165,7 @@
               rounded
               color="primary"
               text
-              class="text-none text-caption "
+              class="text-none text-caption"
               @click.stop="tambahBlok()"
               >Tambah Blok</v-btn
             >
@@ -208,10 +206,11 @@ export default {
           {
             luas_blok: "",
             jumlah_tanaman: "",
-            umur_tanaman: ""
-          }
-        ]
-      }
+            umur_tanaman: "",
+            tahapan_id: 1,
+          },
+        ],
+      },
     };
   },
   mounted() {
@@ -224,6 +223,7 @@ export default {
   methods: {
     async postProject() {
       try {
+        console.log(this.project);
         let response = await this.$axios.post(
           "api/v1/project/create",
           this.project
@@ -232,14 +232,15 @@ export default {
         this.$router.push("/manager-kebun/project-tanam");
       } catch (err) {
         this.error = true;
-        console.log(err);
+        // console.log(err);
       }
     },
     tambahBlok() {
       this.project.blok.push({
         luas_blok: "",
         jumlah_tanaman: "",
-        umur_tanaman: ""
+        umur_tanaman: "",
+        tahapan_id: 1,
       });
     },
     hapusBlok(c) {
@@ -276,8 +277,8 @@ export default {
         this.error = true;
         console.log(err);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

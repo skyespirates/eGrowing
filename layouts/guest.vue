@@ -43,7 +43,7 @@
 
       <v-spacer />
       <v-btn @click.stop="goToLoginPage" color="white" class="hidden-xs-only">
-        <h5 style="color:green">Masuk</h5>
+        <h5 style="color: green">MASUK</h5>
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -55,9 +55,7 @@
       <v-list>
         <v-list-item @click.native="right = !right">
           <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
+            <v-icon light> mdi-repeat </v-icon>
           </v-list-item-action>
           <v-list-item-title>Switch drawer (click me)</v-list-item-title>
         </v-list-item>
@@ -80,7 +78,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: ""
+      title: "",
     };
   },
   computed: {
@@ -89,20 +87,20 @@ export default {
         {
           icon: "mdi-flower-tulip-outline",
           title: "Panduan Budidaya",
-          to: "/"
+          to: "/",
         },
         {
           icon: "mdi-account-outline",
           title: "Daftar",
-          to: "/daftar"
-        }
+          to: "/daftar",
+        },
       ];
-    }
+    },
   },
   methods: {
     goToLoginPage() {
       this.$router.push("/masuk");
-    }
-  }
+    },
+  },
 };
 </script>

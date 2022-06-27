@@ -2,13 +2,11 @@
   <v-row class="py-5">
     <v-col cols="12">
       <div class="d-flex">
-        <div class="title">
-          Project Tanam
-        </div>
+        <div class="title">Project Tanam</div>
         <div class="ml-auto">
           <v-btn
             rounded
-            class="text-none text-caption px-7  "
+            class="text-none text-caption px-7"
             to="/manager-kebun/project-tanam/tambah"
             color="primary"
             ><v-icon>mdi-plus</v-icon> Tambah Project</v-btn
@@ -35,7 +33,7 @@
 
         <template v-slot:[`item.nama_sop`]="{ item }">
           <div class="font-weight-bold">{{ item.nama_sop }}</div>
-          <div>{{ item.nama_tahapan }}</div>
+          <!-- <div>{{ item.nama_tahapan }}</div> -->
         </template>
 
         <template v-slot:[`item.alamat`]="{ item }">
@@ -46,7 +44,7 @@
           <v-btn
             color="primary"
             :to="'/manager-kebun/pencatatan/tambah/' + item.id"
-            class=" px-5  text-none text-caption small "
+            class="px-5 text-none text-caption small"
             rounded
             >Catat Aktivitas</v-btn
           >
@@ -54,7 +52,7 @@
             color="primary"
             :to="'/manager-kebun/project-tanam/' + item.id"
             outlined
-            class=" px-12 text-none text-caption small "
+            class="px-12 text-none text-caption small"
             rounded
             >Detail</v-btn
           >
@@ -76,32 +74,32 @@ export default {
         {
           text: "ID",
           value: "idx",
-          width: "6%"
+          width: "6%",
         },
         {
           text: "Mulai Project",
           value: "created_at",
-          width: "14%"
+          width: "14%",
         },
         {
           text: "Budidaya",
           value: "nama_sop",
-          width: "30%"
+          width: "30%",
         },
         {
           text: "Alamat",
           value: "alamat",
           sortable: false,
-          width: "20%"
+          width: "20%",
         },
         {
           text: "",
           value: "aksi",
           align: "right",
           sortable: false,
-          width: "30%"
-        }
-      ]
+          width: "30%",
+        },
+      ],
     };
   },
   mounted() {
@@ -129,19 +127,19 @@ export default {
             idx: index + 1,
             id: this.projects[index].id,
             nama_sop: this.projects[index].sop.sop_nama,
-            nama_tahapan: this.projects[index].tahapan_sop.nama_tahapan,
+            // nama_tahapan: this.projects[index].tahapan_sop.nama_tahapan,
             alamat: this.projects[index].alamat.alamat,
             created_at: this.projects[index].created_at,
             kota_kab: this.projects[index].alamat.regency.name,
-            jumlah_blok: this.projects[index].blok_lahan.length
+            jumlah_blok: this.projects[index].blok_lahan.length,
           });
         }
       }
       if (this.projectByPetani[0].a == "") {
         this.projectByPetani.splice(0, 1);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
