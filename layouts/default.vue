@@ -46,9 +46,7 @@
       <v-list>
         <v-list-item @click.native="right = !right">
           <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
+            <v-icon light> mdi-repeat </v-icon>
           </v-list-item-action>
           <v-list-item-title>Switch drawer (click me)</v-list-item-title>
         </v-list-item>
@@ -71,7 +69,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: ""
+      title: "",
     };
   },
   computed: {
@@ -81,65 +79,65 @@ export default {
           {
             icon: "mdi-desktop-mac-dashboard",
             title: "Dashboard",
-            to: "/admin/dashboard"
+            to: "/admin/dashboard",
           },
           {
             icon: "mdi-file-document-multiple",
             title: "Laporan",
-            to: "/admin/laporan"
+            to: "/admin/laporan",
           },
           {
             icon: "mdi-account-circle-outline",
             title: "Petani",
-            to: "/admin/petani"
+            to: "/admin/petani",
           },
           {
             icon: "mdi-tractor",
             title: "Lahan",
-            to: "/admin/lahan"
+            to: "/admin/lahan",
           },
           {
             icon: "mdi-file-document-edit",
             title: "SOP",
-            to: "/admin/sop"
+            to: "/admin/sop",
           },
           {
             icon: "mdi-account-clock-outline",
             title: "Membership",
-            to: "/admin/membership"
-          }
+            to: "/admin/membership",
+          },
         ];
       } else if (this.$auth.user.role_id == 1) {
         return [
           {
             icon: "mdi-view-dashboard-outline",
             title: "Beranda",
-            to: "/manager-kebun/dashboard"
+            to: "/manager-kebun/dashboard",
           },
           {
             icon: "mdi-sprout-outline",
             title: "Project Tanam",
-            to: "/manager-kebun/project-tanam"
+            to: "/manager-kebun/project-tanam",
           },
           {
             icon: "mdi-account-outline",
             title: "Profil",
-            to: "/manager-kebun/profil"
-          }
+            to: "/manager-kebun/profil",
+          },
         ];
       }
-    }
+    },
   },
   methods: {
     async userLogout() {
       try {
-        let response = await await this.$auth.logout();
+        let response = await this.$auth.logout();
         console.log(response);
       } catch (err) {
         this.error = true;
         console.log(err);
       }
-    }
-  }
+    },
+  },
 };
 </script>
