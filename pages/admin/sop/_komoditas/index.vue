@@ -6,13 +6,13 @@
           <v-btn icon color="primary" @click="back"
             ><v-icon>mdi-arrow-left</v-icon></v-btn
           >
-          <span class="title my-auto">Melon</span>
+          <span class="title my-auto">{{ this.$route.params.komoditas }}</span>
         </div>
         <div class="ml-auto">
           <v-btn
             rounded
             class="text-none text-caption px-7"
-            to="/admin/sop/new"
+            :to="'/admin/sop/' + komoditas + '/tambah'"
             color="primary"
             ><v-icon>mdi-plus</v-icon> Tambah SOP</v-btn
           >
@@ -33,7 +33,7 @@
         <template v-slot:[`item.aksi`]="{ item }">
           <v-btn
             icon
-            :to="`/sop/${item.nomor}/details/${item.nomor}`"
+            :to="'/admin/sop/' + komoditas + '/details/' + item.id"
             color="blue"
           >
             <v-icon>mdi-information-outline</v-icon>
@@ -52,38 +52,10 @@ export default {
   // middleware: "permission",
   data() {
     return {
+      komoditas: "",
       cari: "",
-      sops: [
-        {
-          nomor: 1,
-          deskripsi: "SOP Buah Melon",
-          estimasi_panen: 112,
-          bobot_panen: 1.7,
-        },
-        {
-          nomor: 2,
-          deskripsi: "SOP Buah Melon",
-          estimasi_panen: 112,
-          bobot_panen: 1.7,
-        },
-        {
-          nomor: 3,
-          deskripsi: "SOP Buah Melon",
-          estimasi_panen: 112,
-          bobot_panen: 1.7,
-        },
-        {
-          nomor: 4,
-          deskripsi: "SOP Buah Melon",
-          estimasi_panen: 112,
-          bobot_panen: 1.7,
-        },
-      ],
+      sops: [],
       th_sops: [
-        {
-          text: "No",
-          value: "nomor",
-        },
         {
           text: "Deskripsi",
           value: "deskripsi",
@@ -92,10 +64,12 @@ export default {
         {
           text: "Kalkulasi Waktu Panen (tahun)",
           value: "estimasi_panen",
+          align: "center",
         },
         {
           text: "Kalkulasi Bobot Panen (kg)",
-          value: "bobot_panen",
+          value: "kalkulasi_bobot_panen",
+          align: "center",
         },
         {
           text: "Aksi",
@@ -105,11 +79,24 @@ export default {
     };
   },
   mounted() {
-    console.log(this.$route.params.id);
+    this.komoditas = this.$route.params.komoditas;
+    this.getSOP();
   },
   methods: {
     back() {
       this.$router.go(-1);
+    },
+    async getSOP() {
+      const komoditas = this.$route.params.komoditas;
+      try {
+        const response = await this.$axios.get(
+          "api/v1/sop?komoditas=" + komoditas
+        );
+        console.log(response.data.sop);
+        this.sops = response.data.sop;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

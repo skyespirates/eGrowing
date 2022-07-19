@@ -77,7 +77,7 @@
             :elevation="hover ? 5 : 2"
             class="mx-auto pb-2 { 'on-hover': hover }"
             color="light-green lighten-4"
-            :to="'/admin/sop/' + fruit.id"
+            :to="'/admin/sop/' + fruit.nama_komoditas"
           >
             <img v-bind:src="fruit.foto" class="background" />
             <v-card-title class="py-0" color="primary accent-4">

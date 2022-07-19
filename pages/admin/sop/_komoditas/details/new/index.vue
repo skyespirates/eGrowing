@@ -1,6 +1,8 @@
 <template>
   <v-app>
-    <v-btn icon color="primary"><v-icon>mdi-arrow-left</v-icon></v-btn>
+    <v-btn icon color="primary" @click="back"
+      ><v-icon>mdi-arrow-left</v-icon></v-btn
+    >
     <h2>Tambah Tahapan Baru</h2>
     <v-card class="py-5 px-5 mb-5">
       <v-form>
@@ -92,24 +94,7 @@ export default {
   data() {
     return {
       nama_tahapan: "",
-      tipeJawaban: [
-        {
-          id: 111,
-          tipe: "aaa",
-        },
-        {
-          id: 222,
-          tipe: "bbb",
-        },
-        {
-          id: 333,
-          tipe: "ccc",
-        },
-        {
-          id: 444,
-          tipe: "ddd",
-        },
-      ],
+      tipeJawaban: [],
       kegiatan: {
         nama_kegiatan: "",
         indikator: [
@@ -133,13 +118,20 @@ export default {
       },
     };
   },
+  mounted() {
+    this.getTipeJawaban();
+  },
   methods: {
     back() {
       this.$router.go(-1);
     },
     async getTipeJawaban() {
       try {
-      } catch (error) {}
+        const response = await this.$axios.get("api/v1/tipe-jawaban");
+        this.tipeJawaban = response.data.data;
+      } catch (error) {
+        console.log(error.message);
+      }
     },
     tambahIndikator() {
       const indikator = {
