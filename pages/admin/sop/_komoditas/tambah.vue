@@ -157,6 +157,9 @@
       <v-btn color="primary" block rounded @click="tambahTahapan"
         >Tambah Tahapan</v-btn
       >
+      <v-alert type="error" :value="alert" dismissible>
+        Gagal membuat SOP baru
+      </v-alert>
       <div class="d-flex justify-end">
         <v-btn color="primary" @click="submitSOP" rounded>Simpan</v-btn>
       </div>
@@ -168,8 +171,9 @@
 export default {
   data() {
     return {
+      alert: false,
       sop: {
-        jenis_komoditas_id: 3,
+        jenis_komoditas_id: null,
         deskripsi: "",
         estimasi_panen: "",
         kalkulasi_bobot_panen: "",
@@ -197,12 +201,25 @@ export default {
     };
   },
   mounted() {
+    this.getKomoditasId();
     this.getTipeJawaban();
     this.komoditas = this.$route.params.komoditas;
   },
   methods: {
     back() {
       this.$router.go(-1);
+    },
+    async getKomoditasId() {
+      try {
+        const response = await this.$axios.get("api/v1/komoditas");
+        const res = response.data.data.find(
+          (e) => e.nama_komoditas === this.komoditas
+        );
+        this.sop.jenis_komoditas_id = res.id;
+      } catch (error) {
+        this.error = true;
+        console.log(error.message);
+      }
     },
     async getTipeJawaban() {
       try {
@@ -257,10 +274,10 @@ export default {
     },
     async submitSOP() {
       try {
-        let response = await this.$axios.post("api/v1/sop", this.sop);
-        console.log(response);
+        await this.$axios.post("api/v1/sop", this.sop);
         this.$router.push("/admin/sop/" + this.komoditas);
       } catch (err) {
+        this.alert = true;
         this.error = true;
         console.log(err);
       }

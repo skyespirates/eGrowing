@@ -33,16 +33,19 @@
         <template v-slot:[`item.aksi`]="{ item }">
           <v-btn
             icon
-            :to="'/admin/sop/' + komoditas + '/details/' + item.id"
+            :to="'/admin/sop/' + komoditas + '/' + item.id"
             color="blue"
           >
             <v-icon>mdi-information-outline</v-icon>
           </v-btn>
-          <v-btn icon :to="'/admin/sop/' + item.nomor" color="red">
+          <v-btn icon @click="deleteSOP(item.id)" color="red">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
       </v-data-table>
+    </v-col>
+    <v-col cols="12">
+      <v-alert type="success" :value="alert"> Berhasil mengapus SOP </v-alert>
     </v-col>
   </v-row>
 </template>
@@ -52,6 +55,8 @@ export default {
   // middleware: "permission",
   data() {
     return {
+      komoditas_id: "",
+      alert: false,
       komoditas: "",
       cari: "",
       sops: [],
@@ -81,21 +86,39 @@ export default {
   mounted() {
     this.komoditas = this.$route.params.komoditas;
     this.getSOP();
+    if (alert) {
+      this.toggleAlert();
+    }
   },
   methods: {
+    toggleAlert() {
+      window.setInterval(() => {
+        this.alert = false;
+      }, 5000);
+    },
     back() {
       this.$router.go(-1);
     },
+
     async getSOP() {
       const komoditas = this.$route.params.komoditas;
       try {
         const response = await this.$axios.get(
           "api/v1/sop?komoditas=" + komoditas
         );
-        console.log(response.data.sop);
         this.sops = response.data.sop;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async deleteSOP(sop_id) {
+      try {
+        const response = await this.$axios.delete("api/v1/sop/" + sop_id);
+        this.sops = this.sops.filter((sop) => sop.id !== sop_id);
+        this.alert = true;
+      } catch (error) {
+        this.error = true;
+        console.log(error.message);
       }
     },
   },

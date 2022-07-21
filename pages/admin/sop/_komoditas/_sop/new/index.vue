@@ -7,7 +7,7 @@
     <v-card class="py-5 px-5 mb-5">
       <v-form>
         <v-row align="center">
-          <v-col cols="12" md="9">
+          <v-col cols="12" md="10">
             <v-text-field
               v-model="nama_tahapan"
               label="Nama Tahapan"
@@ -15,19 +15,25 @@
               dense
               id="nama_tahapan"
               hide-details=""
+              :name="Math.random()"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="3">
-            <v-btn color="primary" rounded class="mr-0">Tambah Tahapan</v-btn>
+          <v-col cols="12" md="2">
+            <v-btn color="primary" rounded class="mr-0" @click="tambahTahapan"
+              >Tambah Tahapan</v-btn
+            >
           </v-col>
         </v-row>
+        <v-alert class="mt-3" type="success" dismissible :value="alertTahapan"
+          >Berhasil membuat tahapan baru, silahkan tambahkan kegiatan</v-alert
+        >
       </v-form>
     </v-card>
     <h2>Nama Kegiatan Pada Tahapan Baru</h2>
     <v-form>
       <v-card class="py-5 px-5">
         <v-row align="center">
-          <v-col cols="12">
+          <v-col cols="10">
             <v-text-field
               label="Nama Kegiatan"
               outlined
@@ -35,8 +41,17 @@
               id="nama_tahapan"
               hide-details=""
               v-model="kegiatan.nama_kegiatan"
-              persistent-hint
-              persistent-placeholder
+              :name="Math.random()"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="2">
+            <v-text-field
+              label="Durasi"
+              outlined
+              dense
+              hide-details=""
+              v-model="kegiatan.durasi_waktu"
+              :name="Math.random()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -63,17 +78,19 @@
                   item-text="tipe"
                   class="ml-md-2"
                   label="Tipe jawaban *"
-                  v-model="indikator.tipe_jawaban"
+                  v-model="indikator.tipe_jawaban_id"
                 ></v-select>
                 <v-btn @click="hapusIndikator(i)" icon
                   ><v-icon>mdi-delete</v-icon></v-btn
                 >
               </v-col>
-              <v-col cols="12"> </v-col>
             </v-row>
           </v-col>
         </v-row>
         <v-btn block rounded @click="tambahIndikator">Tambah indikator</v-btn>
+        <v-alert class="mt-3" type="success" dismissible :value="alertKegiatan"
+          >Berhasil menambahkan kegiatan pada tahapan baru</v-alert
+        >
       </v-card>
       <v-btn
         rounded
@@ -93,33 +110,27 @@
 export default {
   data() {
     return {
+      alertTahapan: false,
+      alertKegiatan: false,
       nama_tahapan: "",
       tipeJawaban: [],
       kegiatan: {
+        tahapan_sop_id: "",
         nama_kegiatan: "",
+        durasi_waktu: "",
         indikator: [
           {
             nama_indikator: "",
-            tipe_jawaban: "",
-          },
-          {
-            nama_indikator: "",
-            tipe_jawaban: "",
-          },
-          {
-            nama_indikator: "",
-            tipe_jawaban: "",
-          },
-          {
-            nama_indikator: "",
-            tipe_jawaban: "",
+            tipe_jawaban_id: "",
           },
         ],
       },
+      sop_id: "",
     };
   },
   mounted() {
     this.getTipeJawaban();
+    this.sop_id = this.$route.params.sop;
   },
   methods: {
     back() {
@@ -133,18 +144,52 @@ export default {
         console.log(error.message);
       }
     },
+    async tambahTahapan() {
+      try {
+        const response = await this.$axios.post(
+          `api/v1/sop/${this.sop_id}/tahapan`,
+          { nama_tahapan: this.nama_tahapan }
+        );
+        this.kegiatan.tahapan_sop_id = response.data.data.id;
+        this.alertTahapan = true;
+        this.nama_tahapan = "";
+      } catch (error) {
+        this.error = true;
+        console.log(error);
+      }
+    },
     tambahIndikator() {
       const indikator = {
         nama_indikator: "",
-        tipe_jawaban: "",
+        tipe_jawaban_id: "",
       };
       this.kegiatan.indikator.push(indikator);
     },
     hapusIndikator(index) {
       this.kegiatan.indikator.splice(index, 1);
     },
-    tambahKegiatan() {
-      console.log(this.kegiatan);
+    async tambahKegiatan() {
+      try {
+        const response = await this.$axios.post(
+          `api/v1/sop/${this.sop_id}/kegiatan`,
+          this.kegiatan
+        );
+        this.alertKegiatan = true;
+        this.kegiatan = {
+          tahapan_sop_id: "",
+          nama_kegiatan: "",
+          durasi_waktu: "",
+          indikator: [
+            {
+              nama_indikator: "",
+              tipe_jawaban_id: "",
+            },
+          ],
+        };
+      } catch (error) {
+        this.error = true;
+        console.log(error);
+      }
     },
   },
 };
