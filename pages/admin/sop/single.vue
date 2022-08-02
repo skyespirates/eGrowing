@@ -32,7 +32,7 @@
             <v-col cols="10" md="11">
               <v-card-title
                 class="mb-1 primary--text text-h6"
-                style="word-break: break-word;"
+                style="word-break: break-word"
                 >Tahap Persiapan Lahan dan Tanaman</v-card-title
               >
             </v-col>
@@ -83,7 +83,7 @@
             <v-col cols="10" md="11">
               <v-card-title
                 class="mb-1 primary--text text-h6"
-                style="word-break: break-word;"
+                style="word-break: break-word"
                 >Tahap Perawatan Tanaman Belum Menghasilkan</v-card-title
               >
             </v-col>
@@ -134,7 +134,7 @@
             <v-col cols="10" md="11">
               <v-card-title
                 class="mb-1 primary--text text-h6"
-                style="word-break: break-word;"
+                style="word-break: break-word"
                 >Tahap Perawatan Tanaman Menghasilkan</v-card-title
               >
             </v-col>
@@ -185,7 +185,7 @@
             <v-col cols="10" md="11">
               <v-card-title
                 class="mb-1 primary--text text-h6"
-                style="word-break: break-word;"
+                style="word-break: break-word"
                 >Tahap Pemanenan</v-card-title
               >
             </v-col>
@@ -250,30 +250,30 @@ export default {
         {
           a: "",
           b: "",
-          c: []
-        }
+          c: [],
+        },
       ],
       tahap2: [
         {
           a: "",
           b: "",
-          c: []
-        }
+          c: [],
+        },
       ],
       tahap3: [
         {
           a: "",
           b: "",
-          c: []
-        }
+          c: [],
+        },
       ],
       tahap4: [
         {
           a: "",
           b: "",
-          c: []
-        }
-      ]
+          c: [],
+        },
+      ],
     };
   },
   mounted() {
@@ -282,9 +282,7 @@ export default {
   methods: {
     async getSop() {
       try {
-        let response = await this.$axios.get(
-          "api/v1/sop/" + this.$route.params.id
-        );
+        let response = await this.$axios.get("api/v1/sop/" + 15);
         this.sop = response.data.data;
         console.log(response);
         this.getSOPByTahapan();
@@ -299,25 +297,25 @@ export default {
           this.tahap1.push({
             a: this.sop.item_pekerjaan[index].nama_kegiatan,
             b: this.sop.item_pekerjaan[index].durasi_waktu,
-            c: this.sop.item_pekerjaan[index].indikator_kegiatan
+            c: this.sop.item_pekerjaan[index].indikator_kegiatan,
           });
         } else if (this.sop.item_pekerjaan[index].tahapan_sop_id === 2) {
           this.tahap2.push({
             a: this.sop.item_pekerjaan[index].nama_kegiatan,
             b: this.sop.item_pekerjaan[index].durasi_waktu,
-            c: this.sop.item_pekerjaan[index].indikator_kegiatan
+            c: this.sop.item_pekerjaan[index].indikator_kegiatan,
           });
         } else if (this.sop.item_pekerjaan[index].tahapan_sop_id === 3) {
           this.tahap3.push({
             a: this.sop.item_pekerjaan[index].nama_kegiatan,
             b: this.sop.item_pekerjaan[index].durasi_waktu,
-            c: this.sop.item_pekerjaan[index].indikator_kegiatan
+            c: this.sop.item_pekerjaan[index].indikator_kegiatan,
           });
         } else if (this.sop.item_pekerjaan[index].tahapan_sop_id === 4) {
           this.tahap4.push({
             a: this.sop.item_pekerjaan[index].nama_kegiatan,
             b: this.sop.item_pekerjaan[index].durasi_waktu,
-            c: this.sop.item_pekerjaan[index].indikator_kegiatan
+            c: this.sop.item_pekerjaan[index].indikator_kegiatan,
           });
         }
       }
@@ -333,8 +331,8 @@ export default {
       if (this.tahap4[0].a == "") {
         this.tahap4.splice(0, 1);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -26,38 +26,19 @@
                     <label for="nama">Pilih Tanaman </label>
                   </v-col>
                   <v-col cols="12" md="9">
-                    <v-autocomplete
+                    <v-select
                       outlined
-                      v-model="project.sop_id"
                       :items="sops"
                       hide-details=""
                       dense
                       item-value="id"
-                      item-text="sop_nama"
-                    ></v-autocomplete>
-                  </v-col>
-                </v-row>
-              </v-col>
-              <v-col cols="12 mb-2">
-                <v-row align="center" no-gutters>
-                  <v-col cols="12" md="3">
-                    <label for="nama">Pilih Tahap Pencatatan Awal </label>
-                  </v-col>
-                  <v-col cols="12" md="9">
-                    <v-autocomplete
-                      outlined
-                      v-model="project.tahapan_sop_id"
-                      hide-details=""
-                      dense
-                      :items="tahapans"
-                      item-value="id"
-                      item-text="nama_tahapan"
-                    ></v-autocomplete>
+                      item-text="deskripsi"
+                      v-model="project.sop_id"
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-col>
             </v-row>
-            <hr class="mb-7" />
             <v-row no-gutters>
               <v-col cols="12">
                 <div class="subtitle-1 font-weight-bold">Data Lahan</div>
@@ -97,7 +78,6 @@
                 </v-row>
               </v-col>
             </v-row>
-            <hr class="mb-7" />
             <v-row no-gutters v-for="(blok, c) in project.blok" :key="c">
               <v-col cols="12">
                 <div class="subtitle-1 font-weight-bold">
@@ -106,6 +86,22 @@
                   >
                   Data Blok {{ c + 1 }}
                 </div>
+              </v-col>
+              <v-col cols="12 mb-2">
+                <v-row align="center" no-gutters>
+                  <v-col cols="12" md="3">
+                    <label for="nama">Periode </label>
+                  </v-col>
+                  <v-col cols="12 d-flex" md="9">
+                    <v-text-field
+                      outlined
+                      type="number"
+                      v-model="blok.periode"
+                      hide-details=""
+                      dense
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
               </v-col>
               <v-col cols="12 mb-2">
                 <v-row align="center" no-gutters>
@@ -191,23 +187,20 @@ export default {
   // middleware: "permission",
   data() {
     return {
+      items: [],
       sops: [],
       tahapans: [],
       kota: [],
       project: {
-        manager_kebun_id: "",
-        sop_id: "",
-        tahapan_sop_id: "1",
-
         alamat: "",
-        regencies_id: "",
-
+        regencies_id: 123,
+        sop_id: "",
         blok: [
           {
             luas_blok: "",
             jumlah_tanaman: "",
             umur_tanaman: "",
-            tahapan_id: 1,
+            periode: "",
           },
         ],
       },
@@ -223,7 +216,7 @@ export default {
   methods: {
     async postProject() {
       try {
-        console.log(this.project);
+        // console.log(this.project);
         let response = await this.$axios.post(
           "api/v1/project/create",
           this.project
@@ -232,7 +225,7 @@ export default {
         this.$router.push("/manager-kebun/project-tanam");
       } catch (err) {
         this.error = true;
-        // console.log(err);
+        console.log(err);
       }
     },
     tambahBlok() {
@@ -240,7 +233,7 @@ export default {
         luas_blok: "",
         jumlah_tanaman: "",
         umur_tanaman: "",
-        tahapan_id: 1,
+        periode: "",
       });
     },
     hapusBlok(c) {
@@ -250,8 +243,6 @@ export default {
       try {
         let response = await this.$axios.get("/api/v1/kota");
         this.kota = response.data.kota;
-
-        console.log(response);
       } catch (err) {
         this.error = true;
         console.log(err);
@@ -259,20 +250,17 @@ export default {
     },
     async getSops() {
       try {
-        let response = await this.$axios.get("api/v1/sop");
-        this.sops = response.data.sop;
-
-        console.log(response);
-      } catch (err) {
+        const res = await this.$axios.get("api/v1/sop");
+        this.sops = res.data.sop;
+      } catch (error) {
         this.error = true;
-        console.log(err);
+        console.log(error.message);
       }
     },
     async getTahapan() {
       try {
         let response = await this.$axios.get("api/v1/tahapan");
         this.tahapans = response.data.tahapan;
-        console.log(response);
       } catch (err) {
         this.error = true;
         console.log(err);

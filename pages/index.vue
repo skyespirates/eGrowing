@@ -35,9 +35,9 @@ export default {
       sops: [
         {
           id: "",
-          sop_nama: ""
-        }
-      ]
+          sop_nama: "",
+        },
+      ],
     };
   },
   mounted() {
@@ -54,8 +54,8 @@ export default {
         this.error = true;
         console.log(err);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

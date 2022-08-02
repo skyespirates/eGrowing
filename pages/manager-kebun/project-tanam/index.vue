@@ -82,11 +82,6 @@ export default {
           width: "14%",
         },
         {
-          text: "Budidaya",
-          value: "nama_sop",
-          width: "30%",
-        },
-        {
           text: "Alamat",
           value: "alamat",
           sortable: false,
